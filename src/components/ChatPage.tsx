@@ -239,9 +239,8 @@ function ChatPage() {
         </div>
 
         <div className={styles.sidebarHeader}>
-          {/* Placeholder for Idea/Design/Code tabs */}
+          {/* Placeholder for Idea/Code tabs */}
           <span className={`${styles.tab} ${styles.activeTab}`}>Idea</span>
-          <span className={styles.tab}>Design</span>
           <span className={styles.tab}>Code</span>
         </div>
         <div className={styles.sidebarContent}>

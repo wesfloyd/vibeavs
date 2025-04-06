@@ -47,23 +47,35 @@ app.post('/api/chat', async (req, res) => {
 
     // Instantiate the Google Gemini model
     console.log("Initializing Gemini model...");
-    const model = google(modelName);
+    const model = google(apiKey, { model: modelName });
     console.log("Model initialized successfully");
 
     try {
       console.log("Sending request to Gemini API...");
       
-      const result = await streamText({
-        model,
-        // Optional: Add a system prompt if needed
-        system: 'You are a helpful assistant designed to validate user ideas by providing constructive feedback, identifying potential challenges, and suggesting improvements.',
-        messages,
+      const response = await model.generate({
+        messages: [
+          { role: 'user', 
+            content: messages.map(m => m.content).join('\n')
+           }
+        ],
+        temperature: 0.7,
+        maxTokens: 1000
       });
       
       console.log("Received response from Gemini API successfully");
       
-      // Respond with the stream
-      result.pipe(res);
+      // Extract the text from the response
+      const result = response.content;
+      console.log("Response text:", result.substring(0, 100) + "...");
+      
+      // Return the response as JSON
+      return res.json({
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: result
+      });
+      
     } catch (error) {
       // Basic error handling
       console.error('Error calling Gemini API:', error);
