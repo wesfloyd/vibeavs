@@ -115,6 +115,14 @@
     overflow-y: auto;
   }
   
+  /* Styles for the new project name header area */
+  .sidebarProjectHeader {
+    margin-bottom: 1rem; /* Space below project name */
+    padding-bottom: 1rem; /* Add padding below */
+    border-bottom: 1px solid var(--input-border-color); /* Separator line */
+    text-align: center; /* Center the header content */
+  }
+  
   .sidebarHeader {
     margin-bottom: 1.5rem;
     display: flex;
@@ -149,9 +157,39 @@
     flex-grow: 1; /* Allow content to fill space if sidebar is tall */
   }
   
-  .projectName {
-    font-weight: bold;
-    margin-bottom: 0.25rem;
+  /* Updated styles for editable project name display in header */
+  .projectNameDisplay {
+    font-size: 1.4rem; /* Larger font size for h2 */
+    font-weight: 600;
+    margin-bottom: 0; /* Remove default margin */
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    display: inline-block;
+    border: 1px dashed transparent;
+    color: var(--text-color); /* Ensure default text color */
+  }
+
+  .projectNameDisplay:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--input-border-color);
+  }
+
+  /* Updated styles for project name input in header */
+  .projectNameInput {
+    font-size: 1.4rem; /* Match display */
+    font-weight: 600; /* Match display */
+    margin-bottom: 0;
+    padding: 4px 9px;
+    width: 80%; /* Adjust width */
+    max-width: 300px; /* Limit max width */
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--accent-color);
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem; /* Match surrounding text */
   }
   
   .fileName {

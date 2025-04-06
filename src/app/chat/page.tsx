@@ -2,13 +2,27 @@
 
 import { useChat } from '@ai-sdk/react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, Suspense } from 'react';
+import { useEffect, Suspense, useState, useRef } from 'react';
 import styles from './ChatPage.module.css';
 
 // Wrap the component that uses useSearchParams in Suspense
 function ChatComponent() {
   const searchParams = useSearchParams();
   const initialPrompt = searchParams.get('prompt');
+  const initialProjectName = searchParams.get('project') || 'Project My-AVS'; // Get project name or use default
+
+  // State for editable project name
+  const [projectName, setProjectName] = useState(initialProjectName);
+  const [isEditingProjectName, setIsEditingProjectName] = useState(false);
+  const projectNameInputRef = useRef<HTMLInputElement>(null);
+
+  // Focus input when editing starts
+  useEffect(() => {
+    if (isEditingProjectName && projectNameInputRef.current) {
+      projectNameInputRef.current.focus();
+      projectNameInputRef.current.select();
+    }
+  }, [isEditingProjectName]);
 
   // NOTE: The '/api/chat' route needs to be created, but won't
   // have full Gemini functionality in this minimal version.
@@ -76,6 +90,34 @@ function ChatComponent() {
 
       {/* Right Column: Static Content */}
       <div className={styles.sidebar}>
+        {/* Editable Project Name - Moved to top of sidebar */}
+        <div className={styles.sidebarProjectHeader}> {/* New container for styling */}
+          {isEditingProjectName ? (
+            <input
+              ref={projectNameInputRef}
+              type="text"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              onBlur={() => setIsEditingProjectName(false)} // Save on blur
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setIsEditingProjectName(false); // Save on Enter
+                  e.preventDefault(); // Prevent form submission if inside one
+                }
+              }}
+              className={styles.projectNameInput} // Style for input
+            />
+          ) : (
+            <h2 // Using h2 for a more prominent header
+              className={styles.projectNameDisplay} // Style for display text
+              onClick={() => setIsEditingProjectName(true)}
+              title="Click to edit project name" // Add tooltip
+            >
+              {projectName}
+            </h2>
+          )}
+        </div>
+
         <div className={styles.sidebarHeader}>
           {/* Placeholder for Idea/Design/Code tabs */}
           <span className={`${styles.tab} ${styles.activeTab}`}>Idea</span>
@@ -83,7 +125,6 @@ function ChatComponent() {
           <span className={styles.tab}>Code</span>
         </div>
         <div className={styles.sidebarContent}>
-          <p className={styles.projectName}>Project Cold Harbor</p>
           <p className={styles.fileName}>User Story.md</p>
           <pre className={styles.codeBlock}>
             {`As a project validator,

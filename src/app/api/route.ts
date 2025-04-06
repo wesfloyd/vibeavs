@@ -1,44 +1,55 @@
 import { CoreMessage, streamText } from 'ai';
-// import { google } from '@ai-sdk/google'; // Import Gemini provider when ready
+import { google } from '@ai-sdk/google'; // Uncommented the import
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  // IMPORTANT: This is a placeholder.
-  // You will need to replace this with actual logic
-  // to call the Gemini 2.5 Pro model using the Vercel AI SDK.
+  const { messages }: { messages: CoreMessage[] } = await req.json();
 
-  // Example of how you might structure it later (replace with actual Gemini call):
-  // const { messages }: { messages: CoreMessage[] } = await req.json();
-  // const result = await streamText({
-  //   model: google('models/gemini-2.5-pro-latest'), // Or your specific model
-  //   system: 'You are a helpful assistant validating ideas.',
-  //   messages,
-  // });
-  // return result.toAIStreamResponse();
+  // Get the API key from environment variables
+  const apiKey = process.env.GOOGLE_API_KEY;
 
+  if (!apiKey) {
+    // Handle the case where the API key is missing
+    return new Response(JSON.stringify({ error: 'Google API key is not configured.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
-  // For now, return a simple hardcoded stream response or error
-  // to satisfy the useChat hook requirement.
-   const readableStream = new ReadableStream({
-    start(controller) {
-      const text = "This is a placeholder response from the backend. Implement Gemini 2.5 Pro logic here.";
-      const encoder = new TextEncoder();
-      controller.enqueue(encoder.encode(`0:"${JSON.stringify({ content: text }).slice(1, -1)}"
-`)); // Vercel AI SDK stream format for text
-      controller.close();
+  // Instantiate the Google Gemini model
+  const model = google('models/gemini-pro', { apiKey }); // Using gemini-pro and passing the key
+
+  try {
+    const result = await streamText({
+      model: model, // Use the instantiated model
+      // Optional: Add a system prompt if needed
+      system: 'You are a helpful assistant designed to validate user ideas by providing constructive feedback, identifying potential challenges, and suggesting improvements.',
+      messages,
+    });
+
+    // Respond with the stream
+    return result.toAIStreamResponse();
+
+  } catch (error) {
+    // Basic error handling
+    console.error('Error calling Gemini API:', error);
+    let errorMessage = 'An error occurred while processing your request.';
+    let statusCode = 500;
+
+    // Check if it's an API error with a specific message
+    if (error instanceof Error) {
+        // You might want to check for specific error types or messages from the SDK
+        // For now, just use the error message if available
+        errorMessage = error.message || errorMessage;
+        // Potentially map specific errors to different status codes if needed
     }
-  });
-
-  return new Response(readableStream, {
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8', // Or 'application/json' if sending structured data
-      'X-Content-Type-Options': 'nosniff', // Security header
-    }
-  });
 
 
-  // Or simply return an error:
-  // return new Response(JSON.stringify({ error: 'API endpoint not fully implemented' }), {
-  //   status: 501,
-  //   headers: { 'Content-Type': 'application/json' },
-  // });
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: statusCode,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }
