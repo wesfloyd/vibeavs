@@ -1,14 +1,17 @@
-/**
- * Simple Express server to handle API requests from the React frontend
- */
-const express = require('express');
-const path = require('path');
-const { CoreMessage, streamText } = require('ai');
-const { google } = require('@ai-sdk/google');
-const dotenv = require('dotenv');
+// server.js
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { streamText } from 'ai';
+import { google } from '@ai-sdk/google';
+import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config();
+
+// ES modules fix for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -16,8 +19,8 @@ const port = process.env.PORT || 3001;
 // Parse JSON request bodies
 app.use(express.json());
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
+// Serve static files from the dist directory (Vite output)
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // API endpoint for chat
 app.post('/api/chat', async (req, res) => {
@@ -51,7 +54,7 @@ app.post('/api/chat', async (req, res) => {
       console.log("Sending request to Gemini API...");
       
       const result = await streamText({
-        model: model,
+        model,
         // Optional: Add a system prompt if needed
         system: 'You are a helpful assistant designed to validate user ideas by providing constructive feedback, identifying potential challenges, and suggesting improvements.',
         messages,
@@ -89,7 +92,7 @@ app.post('/api/chat', async (req, res) => {
 
 // For any other GET request, send the React app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
