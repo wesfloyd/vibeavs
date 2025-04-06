@@ -1,17 +1,15 @@
-'use client'; // Required for useState and useRouter
-
 import React, { useState, FormEvent, KeyboardEvent } from 'react';
-import { useRouter } from 'next/navigation'; // Use next/navigation for App Router
-import styles from './LandingPage.module.css';
+import { useNavigate } from 'react-router-dom';
+import styles from '../styles/LandingPage.module.css';
 
 export default function LandingPage() {
   const [prompt, setPrompt] = useState('');
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleSend = () => {
     if (prompt.trim()) {
-      // Navigate to chat page with just the prompt
-      router.push(`/chat?prompt=${encodeURIComponent(prompt.trim())}`);
+      // Navigate to chat page with prompt and autosend flag
+      navigate(`/chat?prompt=${encodeURIComponent(prompt.trim())}&autosend=true`);
     }
   };
 
@@ -20,7 +18,7 @@ export default function LandingPage() {
     handleSend();
   };
 
-   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     // Check if Enter key is pressed without Shift key
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault(); // Prevent newline in textarea

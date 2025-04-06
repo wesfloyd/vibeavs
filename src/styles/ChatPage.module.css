@@ -1,0 +1,211 @@
+.chatContainer {
+  display: flex;
+  height: calc(100vh - 60px); /* Adjust based on header/footer height if any */
+  max-height: 90vh; /* Limit height */
+  width: 100%;
+  max-width: 1200px; /* Max width of the chat layout */
+  margin: 2rem auto; /* Center layout */
+  border: 1px solid var(--input-border-color);
+  border-radius: 8px;
+  overflow: hidden; /* Prevent content spill */
+}
+
+/* Left Column */
+.chatArea {
+  flex: 2; /* Takes up more space */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--input-bg-color); /* Slightly different background */
+  border-right: 1px solid var(--input-border-color);
+}
+
+.messages {
+  flex-grow: 1;
+  overflow-y: auto; /* Allow scrolling for messages */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Space between messages */
+}
+
+.message {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  max-width: 80%; /* Limit message width */
+  word-wrap: break-word; /* Prevent long words from overflowing */
+}
+
+.messageRole {
+    font-weight: bold;
+    margin-right: 0.5em;
+    display: block; /* Put role on its own line */
+    margin-bottom: 0.3em;
+    font-size: 0.9em;
+    color: var(--placeholder-color);
+}
+
+.userMessage {
+  background-color: #2a3b4d; /* Example user message background */
+  color: var(--text-color);
+  align-self: flex-end; /* Align user messages to the right */
+  margin-left: auto; /* Push to right */
+}
+
+.aiMessage {
+  background-color: var(--button-bg-color); /* Example AI message background */
+  color: var(--text-color);
+  align-self: flex-start; /* Align AI messages to the left */
+  margin-right: auto; /* Push to left */
+}
+
+.noMessages {
+    color: var(--placeholder-color);
+    text-align: center;
+    margin: auto; /* Center placeholder text */
+}
+
+.inputForm {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--input-border-color);
+  position: relative; /* For send button positioning */
+}
+
+.inputField {
+  flex-grow: 1;
+  background-color: transparent; /* Inherit from parent */
+  border: none; /* Remove default border */
+  outline: none; /* Remove focus outline */
+  color: var(--text-color);
+  font-size: 1rem;
+  padding-right: 50px; /* Space for button */
+}
+
+.inputField::placeholder {
+  color: var(--placeholder-color);
+}
+
+.sendButton {
+    position: absolute;
+    right: 1rem; /* Align with padding */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--placeholder-color);
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.sendButton:hover {
+    color: var(--text-color);
+    background-color: var(--button-hover-bg-color);
+}
+
+
+/* Right Column */
+.sidebar {
+  flex: 1; /* Takes up less space */
+  background-color: var(--background-color); /* Main background */
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Styles for the new project name header area */
+.sidebarProjectHeader {
+  margin-bottom: 1rem; /* Space below project name */
+  padding-bottom: 1rem; /* Add padding below */
+  border-bottom: 1px solid var(--input-border-color); /* Separator line */
+  text-align: center; /* Center the header content */
+}
+
+.sidebarHeader {
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--input-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--placeholder-color);
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tab:hover {
+  background-color: var(--button-hover-bg-color);
+  color: var(--text-color);
+}
+
+.activeTab {
+  background-color: var(--input-bg-color);
+  border-color: var(--input-border-color);
+  color: var(--text-color);
+}
+
+.sidebarContent {
+  background-color: var(--highlight-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  flex-grow: 1; /* Allow content to fill space if sidebar is tall */
+}
+
+/* Updated styles for editable project name display in header */
+.projectNameDisplay {
+  font-size: 1.4rem; /* Larger font size for h2 */
+  font-weight: 600;
+  margin-bottom: 0; /* Remove default margin */
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+  border: 1px dashed transparent;
+  color: var(--text-color); /* Ensure default text color */
+}
+
+.projectNameDisplay:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--input-border-color);
+}
+
+/* Updated styles for project name input in header */
+.projectNameInput {
+  font-size: 1.4rem; /* Match display */
+  font-weight: 600; /* Match display */
+  margin-bottom: 0;
+  padding: 4px 9px;
+  width: 80%; /* Adjust width */
+  max-width: 300px; /* Limit max width */
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem; /* Match surrounding text */
+}
+
+.fileName {
+  color: var(--placeholder-color);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.codeBlock {
+  background-color: var(--background-color); /* Slightly darker background for code */
+  padding: 0.8rem;
+  border-radius: 4px;
+  font-family: monospace;
+  white-space: pre-wrap; /* Wrap text */
+  word-wrap: break-word;
+  font-size: 0.85rem;
+  color: var(--text-color);
+  border: 1px solid var(--input-border-color);
+}
