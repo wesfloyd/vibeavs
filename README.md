@@ -1,8 +1,28 @@
 # VibeAVS - AI Chat Experience
 
-A React-based web application that provides a seamless AI chat experience powered by Gemini 2.5 Pro.
+Demo of potential UX to provide an AI enabled chat experience to build AVSs.
+  
+  
+Please note this is **not yet working** (properly integrated with Gemini), used for UX mockup purposes only.
 
-## Features
+
+# Demo
+
+<img src="assets/VibeAVS.gif" alt="Landing Page" width="400"/>
+
+*User enters their AVS idea and is taken into the chat assisted workflow*
+
+<img src="assets/landing-page-v2.png" alt="Landing Page" width="400"/>
+  
+*Landing page with smooth transitions and modern design*
+
+<img src="assets/chat-page.png" alt="Chat Interface" width="400"/>
+  
+*Interactive chat interface with streaming responses*
+
+
+
+## Goals
 
 - Modern, responsive UI with smooth transitions
 - Seamless landing page to chat experience
@@ -16,16 +36,6 @@ A React-based web application that provides a seamless AI chat experience powere
 - CSS Modules for styling
 - AI SDK for chat integration
 - Google Gemini API
-
-# Screenshots
-<img src="assets/landing-page-v2.png" alt="Landing Page" width="400"/>
-  
-*Landing page with smooth transitions and modern design*
-
-<img src="assets/chat-page.png" alt="Chat Interface" width="400"/>
-  
-*Interactive chat interface with streaming responses*
-
 
 ## Getting Started
 
