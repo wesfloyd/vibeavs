@@ -17,6 +17,14 @@ A React-based web application that provides a seamless AI chat experience powere
 - AI SDK for chat integration
 - Google Gemini API
 
+# Screenshots
+<img src="assets/landing-page.png" alt="Landing Page" width="300"/>
+*Landing page with smooth transitions and modern design*
+
+<img src="assets/chat-page.png" alt="Chat Interface" width="300"/>
+*Interactive chat interface with streaming responses*
+
+
 ## Getting Started
 
 ### Prerequisites

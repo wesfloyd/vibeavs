@@ -42,38 +42,44 @@ app.post('/api/chat', async (req, res) => {
     }
 
     // Get model name from environment variable or use default
+    // Note: The @ai-sdk/google package expects model names without the 'models/' prefix
+    
+    // Strip the 'models/' prefix if it exists
     const modelName = process.env.MODEL_NAME || 'models/gemini-pro';
     console.log("Using model:", modelName);
 
     // Instantiate the Google Gemini model
     console.log("Initializing Gemini model...");
-    const model = google(apiKey, { model: modelName });
+    const model = google(modelName);
     console.log("Model initialized successfully");
 
     try {
       console.log("Sending request to Gemini API...");
       
-      const response = await model.generate({
-        messages: [
-          { role: 'user', 
-            content: messages.map(m => m.content).join('\n')
-           }
-        ],
-        temperature: 0.7,
-        maxTokens: 1000
+      // Using the streamText method from 'ai' package with the Google model
+      const stream = await streamText({
+        model: model,
+        messages: messages.map(m => ({
+          role: m.role,
+          content: m.content
+        })),
+        temperature: 0.7
       });
       
-      console.log("Received response from Gemini API successfully");
+      console.log("Streaming response from Gemini API");
       
-      // Extract the text from the response
-      const result = response.content;
-      console.log("Response text:", result.substring(0, 100) + "...");
+      // Get the response data from the stream
+      const response = await Promise.resolve(stream);
+      
+      // Extract the content from the response
+      const fullResponse = response.content;
+      console.log("Full response assembled:", fullResponse);
       
       // Return the response as JSON
       return res.json({
         id: Date.now().toString(),
         role: 'assistant',
-        content: result
+        content: fullResponse
       });
       
     } catch (error) {
@@ -100,6 +106,11 @@ app.post('/api/chat', async (req, res) => {
     console.error("Failed to parse request body:", parseError);
     return res.status(400).json({ error: 'Invalid request format' });
   }
+});
+
+// Add a test endpoint to check API
+app.get('/api/test', (req, res) => {
+  res.json({ status: 'ok', message: 'API is working' });
 });
 
 // For any other GET request, send the React app
